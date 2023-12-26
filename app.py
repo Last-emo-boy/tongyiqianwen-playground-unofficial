@@ -96,7 +96,7 @@ with gr.Blocks() as app:
 
     with gr.Tabs() as tabs:
         with gr.Tabs("通义千问"):
-            with gr.Column(scale=1):
+            with gr.Column():
                 user_message_input = gr.Textbox(label="Your Message", placeholder="Type your message here")
                 assistant_message_input = gr.Textbox(label="Assistant's Reply (if any)", placeholder="Type assistant's reply here")
                 max_tokens_input_msg = gr.Slider(minimum=10, maximum=2000, step=10, value=1500, label="Max Tokens")
@@ -111,7 +111,7 @@ with gr.Blocks() as app:
                 outputs=output_msg
             )
 
-            with gr.Column(scale=1):
+            with gr.Column():
                 prompt_input = gr.Textbox(label="Enter Prompt")
                 max_tokens_input_prompt = gr.Slider(minimum=10, maximum=2000, step=10, value=1500, label="Max Tokens")
                 temperature_input_prompt = gr.Slider(minimum=0.0, maximum=1.0, step=0.01, value=1.0, label="Temperature")
