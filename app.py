@@ -121,7 +121,7 @@ with gr.Blocks() as app:
 
             submit_button_msg.click(
                 call_tongyi_qianwen_with_messages,
-                inputs=[model_variant_selector, user_message_input, assistant_message_input, max_tokens_input_msg, temperature_input_msg, top_p_input_msg],
+                inputs=[model_variant_selector.value, user_message_input, assistant_message_input, max_tokens_input_msg, temperature_input_msg, top_p_input_msg],
                 outputs=output_msg
             )
 
@@ -136,7 +136,7 @@ with gr.Blocks() as app:
 
             submit_button_prompt.click(
                 call_tongyi_qianwen_with_prompt,
-                inputs=[model_variant_selector, prompt_input, max_tokens_input_prompt, temperature_input_prompt, top_p_input_prompt],
+                inputs=[model_variant_selector.value, prompt_input, max_tokens_input_prompt, temperature_input_prompt, top_p_input_prompt],
                 outputs=output_prompt
             )
 
