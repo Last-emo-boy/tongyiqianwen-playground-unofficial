@@ -41,7 +41,7 @@ def get_preset_content(preset_name):
 dashscope.api_key = os.environ.get("DASHSCOPE_API_KEY")
 
 # Specific functions for Tongyi Qianwen
-def call_tongyi_qianwen_with_messages(user_message, assistant_message, max_tokens, temperature, top_p):
+def call_tongyi_qianwen_with_messages(model_name, user_message, assistant_message, max_tokens, temperature, top_p):
     messages = []
     if user_message:
         messages.append({"role": "user", "content": user_message})
@@ -49,7 +49,7 @@ def call_tongyi_qianwen_with_messages(user_message, assistant_message, max_token
         messages.append({"role": "assistant", "content": assistant_message})
 
     response = dashscope.Generation.call(
-        dashscope.Generation.Models.qwen_turbo,
+        model=model_name,
         messages=messages,
         max_tokens=max_tokens,
         temperature=temperature,
@@ -62,9 +62,9 @@ def call_tongyi_qianwen_with_messages(user_message, assistant_message, max_token
     else:
         return f'Error: {response.message}'
 
-def call_tongyi_qianwen_with_prompt(prompt, max_tokens, temperature, top_p):
+def call_tongyi_qianwen_with_prompt(model_name, prompt, max_tokens, temperature, top_p):
     response = dashscope.Generation.call(
-        model=dashscope.Generation.Models.qwen_turbo,
+        model=model_name,
         prompt=prompt,
         max_tokens=max_tokens,
         temperature=temperature,
@@ -96,6 +96,11 @@ with gr.Blocks() as app:
 
     with gr.Tabs() as tabs:
         with gr.Tabs("通义千问"):
+
+            tongyi_model_selector = gr.Dropdown(label="Select Tongyi Model", choices=[
+                "qwen_turbo", "qwen-plus", "qwen-max", "qwen-max-1201", "qwen-max-longcontext"
+            ])
+
             with gr.Column():
                 user_message_input = gr.Textbox(label="Your Message", placeholder="Type your message here")
                 assistant_message_input = gr.Textbox(label="Assistant's Reply (if any)", placeholder="Type assistant's reply here")
@@ -107,7 +112,7 @@ with gr.Blocks() as app:
 
             submit_button_msg.click(
                 call_tongyi_qianwen_with_messages,
-                inputs=[user_message_input, assistant_message_input, max_tokens_input_msg, temperature_input_msg, top_p_input_msg],
+                inputs=[tongyi_model_selector, user_message_input, assistant_message_input, max_tokens_input_msg, temperature_input_msg, top_p_input_msg],
                 outputs=output_msg
             )
 
@@ -119,10 +124,10 @@ with gr.Blocks() as app:
                 submit_button_prompt = gr.Button("Submit")
                 output_prompt = gr.Textbox(label="Model Response")
 
-            submit_button_prompt.click(
-                call_tongyi_qianwen_with_prompt,
-                inputs=[prompt_input, max_tokens_input_prompt, temperature_input_prompt, top_p_input_prompt],
-                outputs=output_prompt
+            submit_button_msg.click(
+                call_tongyi_qianwen_with_messages,
+                inputs=[tongyi_model_selector, user_message_input, assistant_message_input, max_tokens_input_msg, temperature_input_msg, top_p_input_msg],
+                outputs=output_msg
             )
 
         # with gr.Tab("LLaMa2 大语言模型"):
