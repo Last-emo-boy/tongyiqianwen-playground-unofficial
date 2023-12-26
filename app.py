@@ -37,7 +37,8 @@ def load_env():
 
 load_env()
 
-dashscope.api_key = os.getenv('DASHSCOPE_API_KEY')
+# dashscope.api_key = os.getenv('DASHSCOPE_API_KEY')
+dashscope.api_key = os.environ.get("DASHSCOPE_API_KEY")
 
 # Specific functions for Tongyi Qianwen
 def call_tongyi_qianwen_with_messages(user_message, assistant_message, max_tokens, temperature, top_p):
