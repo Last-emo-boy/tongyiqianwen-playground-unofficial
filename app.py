@@ -27,13 +27,13 @@ def get_preset_content(preset_name):
     presets = load_presets("presets.json")
     return presets.get(preset_name, "")
 
-def load_env():
-    with open('.env', 'r') as file:
-        for line in file:
-            if line.startswith('#') or not line.strip():
-                continue
-            key, value = line.strip().split('=', 1)
-            os.environ[key] = value
+# def load_env():
+    # with open('.env', 'r') as file:
+        # for line in file:
+            # if line.startswith('#') or not line.strip():
+                # continue
+            # key, value = line.strip().split('=', 1)
+            # os.environ[key] = value
 
 load_env()
 
