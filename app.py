@@ -41,26 +41,15 @@ def get_preset_content(preset_name):
 dashscope.api_key = os.environ.get("DASHSCOPE_API_KEY")
 
 # Specific functions for Tongyi Qianwen
-def call_tongyi_qianwen_with_messages(model_variant, user_message, assistant_message, max_tokens, temperature, top_p):
-    model_variant = model_variant_selector.value
-    user_message = user_message_input.value
-    assistant_message = assistant_message_input.value
-    max_tokens = max_tokens_input_msg.value
-    temperature = temperature_input_msg.value
-    top_p = top_p_input_msg.value
+def call_tongyi_qianwen_with_messages(user_message, assistant_message, max_tokens, temperature, top_p):
     messages = []
     if user_message:
         messages.append({"role": "user", "content": user_message})
     if assistant_message:
         messages.append({"role": "assistant", "content": assistant_message})
 
-    # 选择模型
-    model = getattr(dashscope.Generation.Models, model_variant)
-
-    print(f"Model Variant: {model_variant}")
-
     response = dashscope.Generation.call(
-        model=model,
+        dashscope.Generation.Models.qwen_turbo,
         messages=messages,
         max_tokens=max_tokens,
         temperature=temperature,
@@ -73,19 +62,9 @@ def call_tongyi_qianwen_with_messages(model_variant, user_message, assistant_mes
     else:
         return f'Error: {response.message}'
 
-def call_tongyi_qianwen_with_prompt(model_variant, prompt, max_tokens, temperature, top_p):
-    model_variant = model_variant_selector.value
-    prompt = prompt_input.value
-    max_tokens = max_tokens_input_prompt.value
-    temperature = temperature_input_prompt.value
-    top_p = top_p_input_prompt.value
-    # 选择模型
-    model = getattr(dashscope.Generation.Models, model_variant)
-
-    print(f"Model Variant: {model_variant}")
-
+def call_tongyi_qianwen_with_prompt(prompt, max_tokens, temperature, top_p):
     response = dashscope.Generation.call(
-        model=model,
+        model=dashscope.Generation.Models.qwen_turbo,
         prompt=prompt,
         max_tokens=max_tokens,
         temperature=temperature,
@@ -114,14 +93,10 @@ with gr.Blocks() as app:
         "元语功能型对话大模型V2", "BiLLa开源推理能力增强模型"
     ])
 
-    model_variant_selector = gr.Dropdown(label="Select a Model Variant", choices=[
-        "qwen_turbo", "qwen-plus", "qwen-max", "qwen-max-1201", "qwen-max-longcontext"
-    ])
 
     with gr.Tabs() as tabs:
         with gr.Tabs("通义千问"):
             with gr.Column():
-                gr.Row([model_variant_selector])
                 user_message_input = gr.Textbox(label="Your Message", placeholder="Type your message here")
                 assistant_message_input = gr.Textbox(label="Assistant's Reply (if any)", placeholder="Type assistant's reply here")
                 max_tokens_input_msg = gr.Slider(minimum=10, maximum=2000, step=10, value=1500, label="Max Tokens")
@@ -132,12 +107,11 @@ with gr.Blocks() as app:
 
             submit_button_msg.click(
                 call_tongyi_qianwen_with_messages,
-                inputs=[model_variant_selector.value, user_message_input, assistant_message_input, max_tokens_input_msg, temperature_input_msg, top_p_input_msg],
+                inputs=[user_message_input, assistant_message_input, max_tokens_input_msg, temperature_input_msg, top_p_input_msg],
                 outputs=output_msg
             )
 
             with gr.Column():
-                gr.Row([model_variant_selector])
                 prompt_input = gr.Textbox(label="Enter Prompt")
                 max_tokens_input_prompt = gr.Slider(minimum=10, maximum=2000, step=10, value=1500, label="Max Tokens")
                 temperature_input_prompt = gr.Slider(minimum=0.0, maximum=1.0, step=0.01, value=1.0, label="Temperature")
@@ -147,7 +121,7 @@ with gr.Blocks() as app:
 
             submit_button_prompt.click(
                 call_tongyi_qianwen_with_prompt,
-                inputs=[model_variant_selector.value, prompt_input, max_tokens_input_prompt, temperature_input_prompt, top_p_input_prompt],
+                inputs=[prompt_input, max_tokens_input_prompt, temperature_input_prompt, top_p_input_prompt],
                 outputs=output_prompt
             )
 
