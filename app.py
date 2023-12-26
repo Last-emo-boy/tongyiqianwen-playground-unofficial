@@ -106,6 +106,7 @@ with gr.Blocks() as app:
     with gr.Tabs() as tabs:
         with gr.Tabs("通义千问"):
             with gr.Column():
+                gr.Row([model_variant_selector])
                 user_message_input = gr.Textbox(label="Your Message", placeholder="Type your message here")
                 assistant_message_input = gr.Textbox(label="Assistant's Reply (if any)", placeholder="Type assistant's reply here")
                 max_tokens_input_msg = gr.Slider(minimum=10, maximum=2000, step=10, value=1500, label="Max Tokens")
@@ -116,11 +117,12 @@ with gr.Blocks() as app:
 
             submit_button_msg.click(
                 call_tongyi_qianwen_with_messages,
-                inputs=[model_selector_input, user_message_input, assistant_message_input, max_tokens_input_msg, temperature_input_msg, top_p_input_msg],
+                inputs=[model_variant_selector, user_message_input, assistant_message_input, max_tokens_input_msg, temperature_input_msg, top_p_input_msg],
                 outputs=output_msg
             )
 
             with gr.Column():
+                gr.Row([model_variant_selector])
                 prompt_input = gr.Textbox(label="Enter Prompt")
                 max_tokens_input_prompt = gr.Slider(minimum=10, maximum=2000, step=10, value=1500, label="Max Tokens")
                 temperature_input_prompt = gr.Slider(minimum=0.0, maximum=1.0, step=0.01, value=1.0, label="Temperature")
@@ -130,7 +132,7 @@ with gr.Blocks() as app:
 
             submit_button_prompt.click(
                 call_tongyi_qianwen_with_prompt,
-                inputs=[model_selector_input, prompt_input, max_tokens_input_prompt, temperature_input_prompt, top_p_input_prompt],
+                inputs=[model_variant_selector, prompt_input, max_tokens_input_prompt, temperature_input_prompt, top_p_input_prompt],
                 outputs=output_prompt
             )
 
