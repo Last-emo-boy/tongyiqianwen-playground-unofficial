@@ -35,7 +35,7 @@ def get_preset_content(preset_name):
             # key, value = line.strip().split('=', 1)
             # os.environ[key] = value
 
-load_env()
+# load_env()
 
 # dashscope.api_key = os.getenv('DASHSCOPE_API_KEY')
 dashscope.api_key = os.environ.get("DASHSCOPE_API_KEY")
