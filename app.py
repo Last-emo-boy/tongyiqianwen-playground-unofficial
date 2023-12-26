@@ -42,6 +42,12 @@ dashscope.api_key = os.environ.get("DASHSCOPE_API_KEY")
 
 # Specific functions for Tongyi Qianwen
 def call_tongyi_qianwen_with_messages(model_variant, user_message, assistant_message, max_tokens, temperature, top_p):
+    model_variant = model_variant_selector.value
+    user_message = user_message_input.value
+    assistant_message = assistant_message_input.value
+    max_tokens = max_tokens_input_msg.value
+    temperature = temperature_input_msg.value
+    top_p = top_p_input_msg.value
     messages = []
     if user_message:
         messages.append({"role": "user", "content": user_message})
@@ -68,6 +74,11 @@ def call_tongyi_qianwen_with_messages(model_variant, user_message, assistant_mes
         return f'Error: {response.message}'
 
 def call_tongyi_qianwen_with_prompt(model_variant, prompt, max_tokens, temperature, top_p):
+    model_variant = model_variant_selector.value
+    prompt = prompt_input.value
+    max_tokens = max_tokens_input_prompt.value
+    temperature = temperature_input_prompt.value
+    top_p = top_p_input_prompt.value
     # 选择模型
     model = getattr(dashscope.Generation.Models, model_variant)
 
@@ -121,7 +132,7 @@ with gr.Blocks() as app:
 
             submit_button_msg.click(
                 call_tongyi_qianwen_with_messages,
-                inputs=[model_variant_selector.value, user_message_input, assistant_message_input, max_tokens_input_msg, temperature_input_msg, top_p_input_msg],
+                inputs=[model_variant_selector, user_message_input, assistant_message_input, max_tokens_input_msg, temperature_input_msg, top_p_input_msg],
                 outputs=output_msg
             )
 
@@ -136,7 +147,7 @@ with gr.Blocks() as app:
 
             submit_button_prompt.click(
                 call_tongyi_qianwen_with_prompt,
-                inputs=[model_variant_selector.value, prompt_input, max_tokens_input_prompt, temperature_input_prompt, top_p_input_prompt],
+                inputs=[model_variant_selector, prompt_input, max_tokens_input_prompt, temperature_input_prompt, top_p_input_prompt],
                 outputs=output_prompt
             )
 
