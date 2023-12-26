@@ -95,7 +95,7 @@ with gr.Blocks() as app:
 
 
     with gr.Tabs() as tabs:
-        with gr.Tab("通义千问"):
+        with gr.Tabs("通义千问"):
             with gr.Column(scale=1):
                 user_message_input = gr.Textbox(label="Your Message", placeholder="Type your message here")
                 assistant_message_input = gr.Textbox(label="Assistant's Reply (if any)", placeholder="Type assistant's reply here")
