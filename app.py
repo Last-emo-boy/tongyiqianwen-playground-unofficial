@@ -51,6 +51,8 @@ def call_tongyi_qianwen_with_messages(model_variant, user_message, assistant_mes
     # 选择模型
     model = getattr(dashscope.Generation.Models, model_variant)
 
+    print(f"Model Variant: {model_variant}")
+
     response = dashscope.Generation.call(
         model=model,
         messages=messages,
@@ -68,6 +70,8 @@ def call_tongyi_qianwen_with_messages(model_variant, user_message, assistant_mes
 def call_tongyi_qianwen_with_prompt(model_variant, prompt, max_tokens, temperature, top_p):
     # 选择模型
     model = getattr(dashscope.Generation.Models, model_variant)
+
+    print(f"Model Variant: {model_variant}")
 
     response = dashscope.Generation.call(
         model=model,
